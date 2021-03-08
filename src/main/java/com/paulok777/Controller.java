@@ -1,6 +1,5 @@
 package com.paulok777;
 
-import com.paulok777.converters.Converter;
 import com.paulok777.converters.ImageConverter;
 import com.paulok777.readers.ImageReaderFactory;
 import com.paulok777.writers.ImageWriterFactory;
@@ -10,13 +9,13 @@ import java.util.Map;
 
 public class Controller {
 
-    private Converter converter;
+    private ImageConverter converter;
 
-    public Controller(Converter converter) {
+    public Controller(ImageConverter converter) {
         this.converter = converter;
     }
 
-    protected void convert(Map<String, String> mapArgs)  {
+    protected void convertImage(Map<String, String> mapArgs)  {
         converter.convert(
                 mapArgs.get(Arguments.SOURCE),
                 mapArgs.get(Arguments.GOAL_FORMAT),
@@ -26,17 +25,15 @@ public class Controller {
 
     public static void main(String[] args) {
         Map<String, String> mapArgs = parse(args);
-        if (args.length < 4) {
-            new Controller(new ImageConverter(new ImageReaderFactory(), new ImageWriterFactory())).convert(mapArgs);
-        }
+        new Controller(new ImageConverter(new ImageReaderFactory(), new ImageWriterFactory())).convertImage(mapArgs);
     }
 
     private static Map<String, String> parse(String[] args) {
         Map<String, String> mapArgs = new HashMap<>();
 
         for (String arg : args)  {
-            String key = arg.substring(0, arg.indexOf('='));
-            String value = arg.substring(arg.indexOf('=') + 1);
+            String key = arg.substring(0, arg.indexOf('=')).toLowerCase();
+            String value = arg.substring(arg.indexOf('=') + 1).toLowerCase();
             mapArgs.put(key, value);
         }
 

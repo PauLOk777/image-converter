@@ -1,9 +1,12 @@
 package com.paulok777.converters;
 
+import com.paulok777.formats.Image;
 import com.paulok777.readers.ImageReaderFactory;
 import com.paulok777.writers.ImageWriterFactory;
 
-public class ImageConverter implements Converter {
+import java.io.File;
+
+public class ImageConverter {
 
     private ImageReaderFactory readerFactory;
     private ImageWriterFactory writerFactory;
@@ -14,7 +17,21 @@ public class ImageConverter implements Converter {
     }
 
     public void convert(String source, String goalFormat, String output) {
-        readerFactory.getReader(source).read();
-        writerFactory.getWriter(goalFormat, output).write();
+        Image image = readerFactory.getReader(source).read();
+        File outputFile = getOutputFile(goalFormat, output);
+        writerFactory.getWriter(goalFormat, outputFile).write(image);
+    }
+
+    private File getOutputFile(String goalFormat, String output) {
+        File clientOutput = new File(output);
+        String[] file = clientOutput.getName().split("\\.");
+
+        if (file.length > 1  && goalFormat.toUpperCase().equals(file[1].toUpperCase())) {
+            return clientOutput;
+        } else if (file.length == 1) {
+            return new File(output + "." + goalFormat);
+        } else {
+            throw new RuntimeException();
+        }
     }
 }
