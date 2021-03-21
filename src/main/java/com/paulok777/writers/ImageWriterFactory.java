@@ -1,12 +1,13 @@
 package com.paulok777.writers;
 
+import com.paulok777.exceptions.UnsupportedExtensionException;
 import com.paulok777.extensions.ImageExtension;
 
 import java.io.File;
 
 public class ImageWriterFactory {
 
-    public ImageWriter getWriter(String goalFormat, File output) {
+    public ImageWriter getWriter(String goalFormat, File output) throws UnsupportedExtensionException {
         ImageExtension imageExtension = ImageExtension.valueOf(goalFormat.toUpperCase());
 
         switch (imageExtension) {
@@ -15,7 +16,7 @@ public class ImageWriterFactory {
             case PPM:
                 return new PpmImageWriter(output);
             default:
-                throw new RuntimeException();
+                throw new UnsupportedExtensionException();
         }
     }
 }

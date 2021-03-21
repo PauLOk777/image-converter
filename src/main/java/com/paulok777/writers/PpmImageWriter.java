@@ -5,6 +5,7 @@ import com.paulok777.formats.PpmData;
 import com.paulok777.io.FileIo;
 
 import java.io.File;
+import java.io.IOException;
 
 public class PpmImageWriter implements ImageWriter {
 
@@ -18,7 +19,7 @@ public class PpmImageWriter implements ImageWriter {
     }
 
     @Override
-    public void write(Image image) {
+    public void write(Image image) throws IOException {
         PpmData data = new PpmData();
         populatePpmData(image, data);
 

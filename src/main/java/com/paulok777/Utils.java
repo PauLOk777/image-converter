@@ -21,4 +21,13 @@ public class Utils {
     public static int byteArrayToInt(byte[] bytes) {
         return ByteBuffer.wrap(bytes).getInt();
     }
+
+    public static String getFileName(String name) {
+        String[] arr = name.split("\\.");
+        return String.join("", Arrays.copyOfRange(arr, 0, arr.length - 1));
+    }
+
+    public static String getFileExtension(String name) {
+        return name.split("\\.")[1];
+    }
 }

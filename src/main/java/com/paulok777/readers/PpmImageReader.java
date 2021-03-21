@@ -1,11 +1,13 @@
 package com.paulok777.readers;
 
+import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.Pixel;
 import com.paulok777.formats.PpmData;
 import com.paulok777.io.FileIo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,11 +20,11 @@ public class PpmImageReader implements ImageReader {
     private static final String WHITESPACE_REGEX = "\\s";
     private static final String WHITESPACES_REGEX = "\\s+";
     private static final String METADATA_PARSE_REGEX =
-            LEFT_PARENTHESES + PpmData.MetaData.MAGIC_NUMBER.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACES_REGEX + LEFT_PARENTHESES + PpmData.MetaData.WIDTH.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACE_REGEX + LEFT_PARENTHESES + PpmData.MetaData.HEIGHT.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACE_REGEX + LEFT_PARENTHESES + PpmData.MetaData.MAX_COLOR_VALUE.getRegex() +
-                    RIGHT_PARENTHESES + WHITESPACE_REGEX;
+        LEFT_PARENTHESES + PpmData.MetaData.MAGIC_NUMBER.getRegex() + RIGHT_PARENTHESES +
+        WHITESPACES_REGEX + LEFT_PARENTHESES + PpmData.MetaData.WIDTH.getRegex() + RIGHT_PARENTHESES +
+        WHITESPACE_REGEX + LEFT_PARENTHESES + PpmData.MetaData.HEIGHT.getRegex() + RIGHT_PARENTHESES +
+        WHITESPACE_REGEX + LEFT_PARENTHESES + PpmData.MetaData.MAX_COLOR_VALUE.getRegex() +
+        RIGHT_PARENTHESES + WHITESPACE_REGEX;
 
     private File source;
 
@@ -31,7 +33,7 @@ public class PpmImageReader implements ImageReader {
     }
 
     @Override
-    public Image read() {
+    public Image read() throws IOException {
 
         PpmData ppmData = new PpmData();
         readToPpmData(ppmData);
@@ -49,7 +51,7 @@ public class PpmImageReader implements ImageReader {
     }
 
 
-    private void readToPpmData(PpmData data) {
+    private void readToPpmData(PpmData data) throws IOException {
         byte[] rawBytes = FileIo.getAllBytesFromSource(source);
         String rawDataString = new String(rawBytes);
         Pattern pattern = Pattern.compile(METADATA_PARSE_REGEX);
@@ -66,17 +68,17 @@ public class PpmImageReader implements ImageReader {
 
             validateNecessaryFields(magicNumber, maxColorValue);
         } else {
-            throw new RuntimeException();
+            throw new InvalidDataException("Passed PPM file has invalid format");
         }
     }
 
-    private void validateNecessaryFields(String magicNumber, int maxColorValue) {
+    private void validateNecessaryFields(String magicNumber, int maxColorValue) throws InvalidDataException {
         if (!magicNumber.equals(PpmData.DEFAULT_MAGIC_NUMBER)) {
-            throw new RuntimeException();
+            throw new InvalidDataException("Passed PPM file has invalid format");
         }
 
         if (maxColorValue != MAX_BITS_PER_COLOR) {
-            throw new RuntimeException();
+            throw new InvalidDataException("Passed PPM file has invalid format");
         }
     }
 

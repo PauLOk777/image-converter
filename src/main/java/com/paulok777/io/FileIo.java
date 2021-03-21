@@ -8,19 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FileIo {
-    public static void writeToOutputFile(byte[] resultData, File output) {
+    public static void writeToOutputFile(byte[] resultData, File output) throws IOException {
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(output))) {
             bos.write(resultData);
-        } catch (IOException e) {
-            throw new RuntimeException();
         }
     }
 
-    public static byte[] getAllBytesFromSource(File source) {
-        try {
-            return Files.readAllBytes(Paths.get(source.toURI()));
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
+    public static byte[] getAllBytesFromSource(File source) throws IOException {
+        return Files.readAllBytes(Paths.get(source.toURI()));
     }
 }

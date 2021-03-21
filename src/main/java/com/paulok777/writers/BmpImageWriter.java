@@ -8,6 +8,7 @@ import com.paulok777.io.FileIo;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class BmpImageWriter implements ImageWriter {
 
@@ -18,7 +19,7 @@ public class BmpImageWriter implements ImageWriter {
     }
 
     @Override
-    public void write(Image image) {
+    public void write(Image image) throws IOException {
         BmpData data = new BmpData();
         populateBmpData(image, data);
 
