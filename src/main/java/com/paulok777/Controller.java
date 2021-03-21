@@ -1,12 +1,9 @@
 package com.paulok777;
 
 import com.paulok777.converters.ImageConverter;
-import com.paulok777.exceptions.InvalidDataException;
-import com.paulok777.exceptions.UnsupportedExtensionException;
 import com.paulok777.readers.ImageReaderFactory;
 import com.paulok777.writers.ImageWriterFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,21 +23,12 @@ public class Controller {
                 ? mapArgs.get(Arguments.OUTPUT)
                 : String.format("%s.%s", Utils.getFileName(source), goalFormat);
 
-            System.out.println(output);
-
             return converter.convert(
                 source,
                 goalFormat,
                 output
             );
-        } catch (UnsupportedExtensionException e) {
-            System.err.println(e.getMessage());
-            return e.getMessage();
-        } catch (InvalidDataException e) {
-            System.err.println(e.getMessage());
-            return e.getMessage();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        } catch (Exception e) {
             return e.getMessage();
         }
     }

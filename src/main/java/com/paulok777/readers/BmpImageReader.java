@@ -1,5 +1,6 @@
 package com.paulok777.readers;
 
+import com.paulok777.Messages;
 import com.paulok777.Utils;
 import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.formats.BmpData;
@@ -91,7 +92,7 @@ public class BmpImageReader implements ImageReader {
                 rawBytes, BmpData.FILE_TYPE_START_INDEX, BmpData.FILE_SIZE_START_INDEX);
 
         if (!BmpData.FILE_TYPE.equals(new String(fileType))) {
-            throw new InvalidDataException("Passed BMP file has invalid format");
+            throw new InvalidDataException(Messages.BMP_FILE_WRONG_FORMAT);
         }
 
         byte[] pixelDataOffset = Arrays.copyOfRange(
@@ -100,7 +101,7 @@ public class BmpImageReader implements ImageReader {
         pixelDataOffset = ArrayUtils.addAll(ZERO_FOUR_BYTES_ARRAY, pixelDataOffset);
 
         if (BmpData.PIXEL_DATA_OFFSET != Utils.byteArrayToLong(pixelDataOffset)) {
-            throw new InvalidDataException("Passed BMP file has invalid format");
+            throw new InvalidDataException(Messages.BMP_FILE_WRONG_FORMAT);
         }
 
         byte[] infoSize = Arrays.copyOfRange(
@@ -109,7 +110,7 @@ public class BmpImageReader implements ImageReader {
         infoSize = ArrayUtils.addAll(ZERO_FOUR_BYTES_ARRAY, infoSize);
 
         if (BmpData.INFO_SIZE != Utils.byteArrayToLong(infoSize)) {
-            throw new InvalidDataException("Passed BMP file has invalid format");
+            throw new InvalidDataException(Messages.BMP_FILE_WRONG_FORMAT);
         }
 
         byte[] bitsPerPixel = Arrays.copyOfRange(
@@ -118,7 +119,7 @@ public class BmpImageReader implements ImageReader {
         bitsPerPixel = ArrayUtils.addAll(ZERO_TWO_BYTES_ARRAY, bitsPerPixel);
 
         if (BmpData.DEFAULT_BITS_PER_PIXEL != Utils.byteArrayToInt(bitsPerPixel)) {
-            throw new InvalidDataException("Passed BMP file has invalid format");
+            throw new InvalidDataException(Messages.BMP_FILE_WRONG_FORMAT);
         }
     }
 

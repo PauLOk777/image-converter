@@ -28,6 +28,10 @@ public class Utils {
     }
 
     public static String getFileExtension(String name) {
-        return name.split("\\.")[1];
+        try {
+            return name.split("\\.")[1];
+        } catch (Exception e) {
+            throw new RuntimeException(Messages.WRONG_ARGUMENTS);
+        }
     }
 }

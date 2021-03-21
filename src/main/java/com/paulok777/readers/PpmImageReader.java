@@ -1,5 +1,6 @@
 package com.paulok777.readers;
 
+import com.paulok777.Messages;
 import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.Pixel;
@@ -68,17 +69,17 @@ public class PpmImageReader implements ImageReader {
 
             validateNecessaryFields(magicNumber, maxColorValue);
         } else {
-            throw new InvalidDataException("Passed PPM file has invalid format");
+            throw new InvalidDataException();
         }
     }
 
     private void validateNecessaryFields(String magicNumber, int maxColorValue) throws InvalidDataException {
         if (!magicNumber.equals(PpmData.DEFAULT_MAGIC_NUMBER)) {
-            throw new InvalidDataException("Passed PPM file has invalid format");
+            throw new InvalidDataException(Messages.PPM_FILE_WRONG_FORMAT);
         }
 
         if (maxColorValue != MAX_BITS_PER_COLOR) {
-            throw new InvalidDataException("Passed PPM file has invalid format");
+            throw new InvalidDataException(Messages.PPM_FILE_WRONG_FORMAT);
         }
     }
 

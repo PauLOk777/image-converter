@@ -1,7 +1,6 @@
 package com.paulok777.converters;
 
 import com.paulok777.Messages;
-import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.exceptions.UnsupportedExtensionException;
 import com.paulok777.formats.Image;
 import com.paulok777.readers.ImageReaderFactory;
@@ -9,7 +8,6 @@ import com.paulok777.writers.ImageWriterFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ImageConverter {
 
@@ -42,7 +40,7 @@ public class ImageConverter {
         } else if (file.length == 1) {
             return new File(output + "." + goalFormat);
         } else {
-            throw new IOException("Failed to create output file");
+            throw new IOException(Messages.FAILED_TO_CREATE_OUTPUT);
         }
     }
 }
