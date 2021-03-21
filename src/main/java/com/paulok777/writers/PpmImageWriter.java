@@ -1,6 +1,5 @@
 package com.paulok777.writers;
 
-import com.paulok777.Utils;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.PpmData;
 import com.paulok777.io.FileIo;
@@ -30,7 +29,7 @@ public class PpmImageWriter implements ImageWriter {
     private void populatePpmData(Image source, PpmData target) {
         target.setWidth(source.getWidth());
         target.setHeight(source.getHeight());
-        target.setData(Utils.ppmImageToByteData(source));
+        target.setData(ppmImageToByteData(source));
     }
 
     private byte[] getResultArray(PpmData data) {
@@ -44,6 +43,20 @@ public class PpmImageWriter implements ImageWriter {
         byte[] resultData = new byte[bytesMetaData.length + data.getData().length];
         System.arraycopy(bytesMetaData, 0, resultData, 0, bytesMetaData.length);
         System.arraycopy(data.getData(), 0, resultData, bytesMetaData.length, data.getData().length);
+        return resultData;
+    }
+
+    private byte[] ppmImageToByteData(Image image) {
+        byte[] resultData = new byte[image.getWidth() * image.getHeight() * 3];
+
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                resultData[(i * image.getWidth() + j) * 3] = image.getPixel(j, i).getRed();
+                resultData[(i * image.getWidth() + j) * 3 + 1] = image.getPixel(j, i).getGreen();
+                resultData[(i * image.getWidth() + j) * 3 + 2] = image.getPixel(j, i).getBlue();
+            }
+        }
+
         return resultData;
     }
 

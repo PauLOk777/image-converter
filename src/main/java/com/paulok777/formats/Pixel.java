@@ -16,23 +16,20 @@ public class Pixel {
         return red;
     }
 
-    public void setRed(byte red) {
-        this.red = red;
-    }
-
     public byte getGreen() {
         return green;
-    }
-
-    public void setGreen(byte green) {
-        this.green = green;
     }
 
     public byte getBlue() {
         return blue;
     }
 
-    public void setBlue(byte blue) {
-        this.blue = blue;
+    @Override
+    public String toString() {
+        return "Pixel{" +
+                "red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                '}';
     }
 }

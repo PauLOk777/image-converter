@@ -15,8 +15,8 @@ public class Controller {
         this.converter = converter;
     }
 
-    protected void convertImage(Map<String, String> mapArgs)  {
-        converter.convert(
+    protected String convertImage(Map<String, String> mapArgs)  {
+        return converter.convert(
                 mapArgs.get(Arguments.SOURCE),
                 mapArgs.get(Arguments.GOAL_FORMAT),
                 mapArgs.get(Arguments.OUTPUT)
@@ -25,7 +25,9 @@ public class Controller {
 
     public static void main(String[] args) {
         Map<String, String> mapArgs = parse(args);
-        new Controller(new ImageConverter(new ImageReaderFactory(), new ImageWriterFactory())).convertImage(mapArgs);
+        String message = new Controller(
+                new ImageConverter(new ImageReaderFactory(), new ImageWriterFactory())).convertImage(mapArgs);
+        System.out.println(message);
     }
 
     private static Map<String, String> parse(String[] args) {

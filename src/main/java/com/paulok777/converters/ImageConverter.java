@@ -1,10 +1,12 @@
 package com.paulok777.converters;
 
+import com.paulok777.Messages;
 import com.paulok777.formats.Image;
 import com.paulok777.readers.ImageReaderFactory;
 import com.paulok777.writers.ImageWriterFactory;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class ImageConverter {
 
@@ -16,10 +18,17 @@ public class ImageConverter {
         this.writerFactory = writerFactory;
     }
 
-    public void convert(String source, String goalFormat, String output) {
-        Image image = readerFactory.getReader(source).read();
-        File outputFile = getOutputFile(goalFormat, output);
-        writerFactory.getWriter(goalFormat, outputFile).write(image);
+    public String convert(String source, String goalFormat, String output) {
+        try {
+            Image image = readerFactory.getReader(source).read();
+            File outputFile = getOutputFile(goalFormat, output);
+            writerFactory.getWriter(goalFormat, outputFile).write(image);
+        } catch (Exception e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            return e.getMessage();
+        }
+
+        return Messages.SUCCESS_CONVERT;
     }
 
     private File getOutputFile(String goalFormat, String output) {

@@ -3,6 +3,7 @@ package com.paulok777.writers;
 import com.paulok777.Utils;
 import com.paulok777.formats.BmpData;
 import com.paulok777.formats.Image;
+import com.paulok777.formats.Pixel;
 import com.paulok777.io.FileIo;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -21,7 +22,7 @@ public class BmpImageWriter implements ImageWriter {
         BmpData data = new BmpData();
         populateBmpData(image, data);
 
-        byte[] resultData = getResultArray(data);
+        byte[] resultData = getResultData(data);
         FileIo.writeToOutputFile(resultData, output);
     }
 
@@ -36,10 +37,10 @@ public class BmpImageWriter implements ImageWriter {
         byte[] heightInBytes = Utils.longToByteArraySize4(source.getHeight());
         ArrayUtils.reverse(heightInBytes);
         target.setHeight(heightInBytes);
-        target.setData(Utils.bmpImageToByteData(source));
+        target.setData(bmpImageToByteData(source));
     }
 
-    private byte[] getResultArray(BmpData data) {
+    private byte[] getResultData(BmpData data) {
         byte[] resultData = new byte[(int) BmpData.PIXEL_DATA_OFFSET + data.getData().length];
         System.arraycopy(data.getFileType(), 0,
                 resultData, BmpData.FILE_TYPE_START_INDEX, data.getFileType().length);
@@ -65,16 +66,41 @@ public class BmpImageWriter implements ImageWriter {
                 resultData, BmpData.COMPRESSION_START_INDEX, data.getCompression().length);
         System.arraycopy(data.getImageSize(), 0,
                 resultData, BmpData.IMAGE_SIZE_START_INDEX, data.getImageSize().length);
-        System.arraycopy(data.getxPixelsPerMeter(), 0,
-                resultData, BmpData.X_PIXELS_PER_METER_START_INDEX, data.getxPixelsPerMeter().length);
-        System.arraycopy(data.getyPixelsPerMeter(), 0,
-                resultData, BmpData.Y_PIXELS_PER_METER_START_INDEX, data.getyPixelsPerMeter().length);
+        System.arraycopy(data.getXPixelsPerMeter(), 0,
+                resultData, BmpData.X_PIXELS_PER_METER_START_INDEX, data.getXPixelsPerMeter().length);
+        System.arraycopy(data.getYPixelsPerMeter(), 0,
+                resultData, BmpData.Y_PIXELS_PER_METER_START_INDEX, data.getYPixelsPerMeter().length);
         System.arraycopy(data.getTotalColors(), 0,
                 resultData, BmpData.TOTAL_COLORS_START_INDEX, data.getTotalColors().length);
         System.arraycopy(data.getImportantColors(), 0,
                 resultData, BmpData.IMPORTANT_COLORS_START_INDEX, data.getImportantColors().length);
         System.arraycopy(data.getData(), 0,
                 resultData, BmpData.IMPORTANT_COLORS_START_INDEX + 4, data.getData().length);
+        return resultData;
+    }
+
+    private byte[] bmpImageToByteData(Image image) {
+        int countOfZeroBytesInEndOfRow = (int)
+                ((Math.ceil(image.getWidth() * 3 / 4.0) - (image.getWidth() * 3 / 4.0)) * 4);
+        byte[] resultData =
+                new byte[image.getWidth() * image.getHeight() * 3 + countOfZeroBytesInEndOfRow * image.getHeight()];
+
+        int counterForBytes = 0;
+        for (int i = image.getHeight() - 1; i >= 0; i--) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                Pixel pixel = image.getPixel(j, i);
+                resultData[counterForBytes] = pixel.getBlue();
+                resultData[counterForBytes + 1] = pixel.getGreen();
+                resultData[counterForBytes + 2] = pixel.getRed();
+                counterForBytes += 3;
+            }
+
+            for (int j = 0; j < countOfZeroBytesInEndOfRow; j++) {
+                resultData[counterForBytes] = 0;
+                counterForBytes++;
+            }
+        }
+
         return resultData;
     }
 }

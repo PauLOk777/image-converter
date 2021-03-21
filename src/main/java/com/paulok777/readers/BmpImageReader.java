@@ -3,6 +3,7 @@ package com.paulok777.readers;
 import com.paulok777.Utils;
 import com.paulok777.formats.BmpData;
 import com.paulok777.formats.Image;
+import com.paulok777.formats.Pixel;
 import com.paulok777.io.FileIo;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -39,7 +40,7 @@ public class BmpImageReader implements ImageReader {
         byte[] height = Arrays.copyOf(source.getHeight(), source.getHeight().length);
         ArrayUtils.reverse(height);
         target.setHeight(Utils.byteArrayToInt(height));
-        target.setPixels(Utils.bmpByteDataToPixels(source.getData(),
+        target.setPixels(bmpByteDataToPixels(source.getData(),
                 Utils.byteArrayToInt(width), Utils.byteArrayToInt(height)));
     }
 
@@ -72,13 +73,13 @@ public class BmpImageReader implements ImageReader {
                 rawBytes, BmpData.COMPRESSION_START_INDEX, BmpData.IMAGE_SIZE_START_INDEX));
         data.setImageSize(Arrays.copyOfRange(
                 rawBytes, BmpData.IMAGE_SIZE_START_INDEX, BmpData.X_PIXELS_PER_METER_START_INDEX));
-        data.setxPixelsPerMeter(Arrays.copyOfRange(
+        data.setXPixelsPerMeter(Arrays.copyOfRange(
                 rawBytes, BmpData.X_PIXELS_PER_METER_START_INDEX, BmpData.Y_PIXELS_PER_METER_START_INDEX));
-        data.setyPixelsPerMeter(Arrays.copyOfRange(
+        data.setYPixelsPerMeter(Arrays.copyOfRange(
                 rawBytes, BmpData.Y_PIXELS_PER_METER_START_INDEX, BmpData.TOTAL_COLORS_START_INDEX));
         data.setTotalColors(Arrays.copyOfRange(
                 rawBytes, BmpData.TOTAL_COLORS_START_INDEX, BmpData.IMPORTANT_COLORS_START_INDEX));
-        data.setTotalColors(Arrays.copyOfRange(
+        data.setImportantColors(Arrays.copyOfRange(
                 rawBytes, BmpData.IMPORTANT_COLORS_START_INDEX, BmpData.IMPORTANT_COLORS_START_INDEX + 4));
         data.setData(Arrays.copyOfRange(rawBytes, BmpData.IMPORTANT_COLORS_START_INDEX + 4, rawBytes.length));
     }
@@ -117,5 +118,22 @@ public class BmpImageReader implements ImageReader {
         if (BmpData.DEFAULT_BITS_PER_PIXEL != Utils.byteArrayToInt(bitsPerPixel)) {
             throw new RuntimeException();
         }
+    }
+
+    private Pixel[] bmpByteDataToPixels(byte[] data, int width, int height) {
+        Pixel[] pixels = new Pixel[data.length / 3];
+
+        int countOfZeroBytesInEndOfRow = (int)((Math.ceil(width * 3 / 4.0) - (width * 3 / 4.0)) * 4);
+        int counterForPixels = 0;
+        for (int i = height - 1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
+                pixels[counterForPixels] = new Pixel(data[(i * width + j) * 3 + 2 + i * countOfZeroBytesInEndOfRow],
+                        data[(i * width + j) * 3 + 1 + i * countOfZeroBytesInEndOfRow],
+                        data[(i * width + j) * 3 + i * countOfZeroBytesInEndOfRow]);
+                counterForPixels++;
+            }
+        }
+
+        return pixels;
     }
 }

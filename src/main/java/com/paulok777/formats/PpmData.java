@@ -20,7 +20,7 @@ public class PpmData {
         private int order;
         private String regex;
 
-        private MetaData(int order, String regex) {
+        MetaData(int order, String regex) {
             this.order = order;
             this.regex = regex;
         }

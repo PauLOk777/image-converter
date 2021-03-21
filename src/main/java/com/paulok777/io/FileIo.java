@@ -12,7 +12,7 @@ public class FileIo {
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(output))) {
             bos.write(resultData);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 

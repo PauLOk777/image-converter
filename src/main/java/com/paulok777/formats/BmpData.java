@@ -182,19 +182,19 @@ public class BmpData {
         this.imageSize = imageSize;
     }
 
-    public byte[] getxPixelsPerMeter() {
+    public byte[] getXPixelsPerMeter() {
         return xPixelsPerMeter;
     }
 
-    public void setxPixelsPerMeter(byte[] xPixelsPerMeter) {
+    public void setXPixelsPerMeter(byte[] xPixelsPerMeter) {
         this.xPixelsPerMeter = xPixelsPerMeter;
     }
 
-    public byte[] getyPixelsPerMeter() {
+    public byte[] getYPixelsPerMeter() {
         return yPixelsPerMeter;
     }
 
-    public void setyPixelsPerMeter(byte[] yPixelsPerMeter) {
+    public void setYPixelsPerMeter(byte[] yPixelsPerMeter) {
         this.yPixelsPerMeter = yPixelsPerMeter;
     }
 

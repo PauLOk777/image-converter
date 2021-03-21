@@ -1,7 +1,7 @@
 package com.paulok777.readers;
 
-import com.paulok777.Utils;
 import com.paulok777.formats.Image;
+import com.paulok777.formats.Pixel;
 import com.paulok777.formats.PpmData;
 import com.paulok777.io.FileIo;
 
@@ -45,7 +45,7 @@ public class PpmImageReader implements ImageReader {
     private void populateRawData(PpmData source, Image target) {
         target.setWidth(source.getWidth());
         target.setHeight(source.getHeight());
-        target.setPixels(Utils.ppmByteDataToPixels(source.getData()));
+        target.setPixels(ppmByteDataToPixels(source.getData()));
     }
 
 
@@ -78,5 +78,15 @@ public class PpmImageReader implements ImageReader {
         if (maxColorValue != MAX_BITS_PER_COLOR) {
             throw new RuntimeException();
         }
+    }
+
+    private Pixel[] ppmByteDataToPixels(byte[] data) {
+        Pixel[] pixels = new Pixel[data.length / 3];
+
+        for (int i = 0; i < pixels.length; i++) {
+            pixels[i] = new Pixel(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+        }
+
+        return pixels;
     }
 }
