@@ -1,6 +1,7 @@
 package com.paulok777.readers;
 
 import com.paulok777.Messages;
+import com.paulok777.annotations.ImageReaderImplementation;
 import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.Pixel;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@ImageReaderImplementation(extension = "ppm")
 public class PpmImageReader implements ImageReader {
 
     private static final int MAX_BITS_PER_COLOR = 255;

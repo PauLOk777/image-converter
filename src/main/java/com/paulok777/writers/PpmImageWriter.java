@@ -1,5 +1,6 @@
 package com.paulok777.writers;
 
+import com.paulok777.annotations.ImageWriterImplementation;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.PpmData;
 import com.paulok777.io.FileIo;
@@ -7,6 +8,7 @@ import com.paulok777.io.FileIo;
 import java.io.File;
 import java.io.IOException;
 
+@ImageWriterImplementation(extension = "ppm")
 public class PpmImageWriter implements ImageWriter {
 
     private static final String NEW_LINE = "\n";

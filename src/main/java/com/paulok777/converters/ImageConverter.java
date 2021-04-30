@@ -19,7 +19,7 @@ public class ImageConverter {
         this.writerFactory = writerFactory;
     }
 
-    public String convert(
+    public void convert(
         String source,
         String goalFormat,
         String output
@@ -27,8 +27,6 @@ public class ImageConverter {
         Image image = readerFactory.getReader(source).read();
         File outputFile = getOutputFile(goalFormat, output);
         writerFactory.getWriter(goalFormat, outputFile).write(image);
-
-        return Messages.SUCCESS_CONVERT;
     }
 
     private File getOutputFile(String goalFormat, String output) throws IOException {

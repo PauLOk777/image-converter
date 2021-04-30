@@ -1,6 +1,7 @@
 package com.paulok777.writers;
 
 import com.paulok777.Utils;
+import com.paulok777.annotations.ImageWriterImplementation;
 import com.paulok777.formats.BmpData;
 import com.paulok777.formats.Image;
 import com.paulok777.formats.Pixel;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.io.IOException;
 
+@ImageWriterImplementation(extension = "bmp")
 public class BmpImageWriter implements ImageWriter {
 
     private File output;

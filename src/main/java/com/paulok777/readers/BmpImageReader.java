@@ -2,6 +2,7 @@ package com.paulok777.readers;
 
 import com.paulok777.Messages;
 import com.paulok777.Utils;
+import com.paulok777.annotations.ImageReaderImplementation;
 import com.paulok777.exceptions.InvalidDataException;
 import com.paulok777.formats.BmpData;
 import com.paulok777.formats.Image;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+@ImageReaderImplementation(extension = "bmp")
 public class BmpImageReader implements ImageReader {
 
     private static final byte[] ZERO_FOUR_BYTES_ARRAY = {0, 0, 0, 0};
