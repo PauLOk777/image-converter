@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Optional.ofNullable;
+
 public class Controller {
 
     private ImageConverter converter;
@@ -20,9 +22,8 @@ public class Controller {
     protected void convertImage(Map<String, String> mapArgs) throws IOException, UnsupportedExtensionException {
         String source = mapArgs.get(Arguments.SOURCE);
         String goalFormat = mapArgs.get(Arguments.GOAL_FORMAT);
-        String output = mapArgs.get(Arguments.OUTPUT) != null
-            ? mapArgs.get(Arguments.OUTPUT)
-            : String.format("%s.%s", Utils.getFileName(source), goalFormat);
+        String output = ofNullable(mapArgs.get(Arguments.OUTPUT))
+                .orElse(String.format("%s.%s", Utils.getFileName(source), goalFormat));
 
         converter.convert(
             source,

@@ -8,7 +8,6 @@ import com.paulok777.exceptions.WrongArgumentsException;
 import org.reflections.Reflections;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -18,14 +17,14 @@ public class ImageReaderFactory {
 
     private final static String IMAGE_READERS_PACKAGE = "com.paulok777.readers";
 
-    private Map<String, Class> imageReaders;
+    private Map<String, Class<?>> imageReaders;
 
     public ImageReaderFactory() {
         Reflections reflections = new Reflections(IMAGE_READERS_PACKAGE);
         Set<Class<?>> classes = reflections.getTypesAnnotatedWith(ImageReaderImplementation.class);
 
-        imageReaders = classes.stream().collect(Collectors.toMap((Class imageReader) -> {
-            ImageReaderImplementation annotation = (ImageReaderImplementation) imageReader.getAnnotation(ImageReaderImplementation.class);
+        imageReaders = classes.stream().collect(Collectors.toMap((Class<?> imageReader) -> {
+            ImageReaderImplementation annotation = imageReader.getAnnotation(ImageReaderImplementation.class);
             return annotation.extension();
         }, Function.identity()));
     }
@@ -45,12 +44,11 @@ public class ImageReaderFactory {
         }
 
         try {
-            ImageReader imageReader = (ImageReader) imageReaders
+            return (ImageReader) imageReaders
                 .get(imageExtension)
                 .getDeclaredConstructor(File.class)
                 .newInstance(sourceFile);
-            return imageReader;
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new UnsupportedExtensionException(String.format(Messages.UNSUPPORTED_EXTENSION, extension));
         }
     }
